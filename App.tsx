@@ -1,10 +1,9 @@
 import React from 'react';
+import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { registerRootComponent } from 'expo';
 
 // Import screens
 import DocumentDetailScreen from './src/screens/DocumentDetailScreen';
@@ -43,7 +42,7 @@ export type Document = {
 
 export default function App() {
   return (
-    <SafeAreaProvider>
+    <View style={{ flex: 1 }}>
       <PaperProvider theme={theme}>
         <NavigationContainer>
           <Stack.Navigator
@@ -83,7 +82,7 @@ export default function App() {
           <StatusBar style="light" />
         </NavigationContainer>
       </PaperProvider>
-    </SafeAreaProvider>
+    </View>
   );
 }
 
