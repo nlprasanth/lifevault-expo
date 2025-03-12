@@ -118,10 +118,6 @@ const SettingsScreen = () => {
     );
   };
 
-  const renderIcon = (name: string, color?: string) => (
-    <List.Icon icon={name} color={color} />
-  );
-
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="light" />
@@ -129,7 +125,7 @@ const SettingsScreen = () => {
         <List.Subheader>Appearance</List.Subheader>
         <List.Item
           title="Dark Mode"
-          left={() => renderIcon('theme-light-dark')}
+          left={() => <List.Icon icon="theme-light-dark" size={24} />}
           right={() => (
             <Switch
               value={darkMode}
@@ -150,7 +146,7 @@ const SettingsScreen = () => {
           <List.Item
             title="Biometric Lock"
             description="Require authentication to open app"
-            left={() => renderIcon('fingerprint')}
+            left={() => <List.Icon icon="fingerprint" size={24} />}
             right={() => (
               <Switch
                 value={biometricLock}
@@ -161,7 +157,7 @@ const SettingsScreen = () => {
         )}
         <List.Item
           title="Change Password"
-          left={() => renderIcon('lock')}
+          left={() => <List.Icon icon="lock" size={24} />}
           onPress={() => setShowPasswordDialog(true)}
         />
       </List.Section>
@@ -173,7 +169,7 @@ const SettingsScreen = () => {
         <List.Item
           title="Auto Backup"
           description="Automatically backup to cloud"
-          left={() => renderIcon('cloud-upload')}
+          left={() => <List.Icon icon="cloud-upload" size={24} />}
           right={() => (
             <Switch
               value={autoBackup}
@@ -186,7 +182,7 @@ const SettingsScreen = () => {
         />
         <List.Item
           title="Backup Now"
-          left={() => renderIcon('backup-restore')}
+          left={() => <List.Icon icon="backup-restore" size={24} />}
           onPress={() => Alert.alert('Info', 'Backup started')}
         />
       </List.Section>
@@ -198,7 +194,7 @@ const SettingsScreen = () => {
         <List.Item
           title="Clear All Data"
           description="Delete all documents and recordings"
-          left={() => renderIcon('delete', '#dc3545')}
+          left={() => <List.Icon icon="delete" size={24} color="#dc3545" />}
           onPress={handleClearData}
         />
       </List.Section>
@@ -221,7 +217,6 @@ const SettingsScreen = () => {
             <Button onPress={() => setShowPasswordDialog(false)}>Cancel</Button>
             <Button
               onPress={() => {
-                // Handle password change
                 setShowPasswordDialog(false);
                 setPassword('');
               }}
