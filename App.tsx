@@ -4,7 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
-import { registerRootComponent } from 'expo';
 
 // Import screens
 import DocumentDetailScreen from './src/screens/DocumentDetailScreen';
@@ -41,7 +40,7 @@ export type Document = {
   content?: string;
 };
 
-function App() {
+export default function App() {
   return (
     <View style={{ flex: 1 }}>
       <PaperProvider theme={theme}>
@@ -86,5 +85,3 @@ function App() {
     </View>
   );
 }
-
-registerRootComponent(App);
