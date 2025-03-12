@@ -93,8 +93,8 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
       <List.Item
         title={item.name}
         description={`${item.type.toUpperCase()} • ${new Date(item.updatedAt).toLocaleDateString()}`}
-        left={props => <List.Icon {...props} icon="file-document-outline" />}
-        right={props => <List.Icon {...props} icon="chevron-right" />}
+        left={() => <List.Icon icon="file-document-outline" size={24} />}
+        right={() => <List.Icon icon="chevron-right" size={24} />}
       />
     </TouchableOpacity>
   );
