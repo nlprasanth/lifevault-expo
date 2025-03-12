@@ -40,17 +40,17 @@ const DocumentDetailScreen: React.FC<DocumentDetailScreenProps> = () => {
         <View style={styles.headerButtons}>
           <IconButton
             icon="pencil"
-            size={24}
+            size={20}
             onPress={() => setIsEditing(!isEditing)}
           />
           <IconButton
             icon="share-variant"
-            size={24}
+            size={20}
             onPress={handleShare}
           />
           <IconButton
             icon="delete"
-            size={24}
+            size={20}
             onPress={handleDelete}
           />
         </View>
