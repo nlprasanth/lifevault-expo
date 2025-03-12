@@ -13,6 +13,7 @@ import {
   Dialog,
   Portal,
   TextInput,
+  useTheme,
 } from 'react-native-paper';
 import * as FileSystem from 'expo-file-system';
 import * as LocalAuthentication from 'expo-local-authentication';
@@ -20,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 
 const SettingsScreen = () => {
+  const theme = useTheme();
   const [darkMode, setDarkMode] = useState(false);
   const [biometricLock, setBiometricLock] = useState(false);
   const [autoBackup, setAutoBackup] = useState(false);
@@ -116,6 +118,10 @@ const SettingsScreen = () => {
     );
   };
 
+  const renderIcon = (name: string, color?: string) => (
+    <List.Icon icon={name} color={color} />
+  );
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="light" />
@@ -123,7 +129,7 @@ const SettingsScreen = () => {
         <List.Subheader>Appearance</List.Subheader>
         <List.Item
           title="Dark Mode"
-          left={props => <List.Icon {...props} icon="theme-light-dark" />}
+          left={() => renderIcon('theme-light-dark')}
           right={() => (
             <Switch
               value={darkMode}
@@ -144,7 +150,7 @@ const SettingsScreen = () => {
           <List.Item
             title="Biometric Lock"
             description="Require authentication to open app"
-            left={props => <List.Icon {...props} icon="fingerprint" />}
+            left={() => renderIcon('fingerprint')}
             right={() => (
               <Switch
                 value={biometricLock}
@@ -155,7 +161,7 @@ const SettingsScreen = () => {
         )}
         <List.Item
           title="Change Password"
-          left={props => <List.Icon {...props} icon="lock" />}
+          left={() => renderIcon('lock')}
           onPress={() => setShowPasswordDialog(true)}
         />
       </List.Section>
@@ -167,7 +173,7 @@ const SettingsScreen = () => {
         <List.Item
           title="Auto Backup"
           description="Automatically backup to cloud"
-          left={props => <List.Icon {...props} icon="cloud-upload" />}
+          left={() => renderIcon('cloud-upload')}
           right={() => (
             <Switch
               value={autoBackup}
@@ -180,7 +186,7 @@ const SettingsScreen = () => {
         />
         <List.Item
           title="Backup Now"
-          left={props => <List.Icon {...props} icon="backup-restore" />}
+          left={() => renderIcon('backup-restore')}
           onPress={() => Alert.alert('Info', 'Backup started')}
         />
       </List.Section>
@@ -192,7 +198,7 @@ const SettingsScreen = () => {
         <List.Item
           title="Clear All Data"
           description="Delete all documents and recordings"
-          left={props => <List.Icon {...props} icon="delete" color="#dc3545" />}
+          left={() => renderIcon('delete', '#dc3545')}
           onPress={handleClearData}
         />
       </List.Section>
@@ -205,29 +211,23 @@ const SettingsScreen = () => {
           <Dialog.Title>Change Password</Dialog.Title>
           <Dialog.Content>
             <TextInput
-              label="Current Password"
-              secureTextEntry
-              style={styles.input}
-            />
-            <TextInput
               label="New Password"
-              secureTextEntry
               value={password}
               onChangeText={setPassword}
-              style={styles.input}
-            />
-            <TextInput
-              label="Confirm New Password"
               secureTextEntry
-              style={styles.input}
             />
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowPasswordDialog(false)}>Cancel</Button>
-            <Button onPress={() => {
-              setShowPasswordDialog(false);
-              Alert.alert('Success', 'Password changed successfully');
-            }}>Save</Button>
+            <Button
+              onPress={() => {
+                // Handle password change
+                setShowPasswordDialog(false);
+                setPassword('');
+              }}
+            >
+              Save
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -239,9 +239,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  input: {
-    marginBottom: 16,
   },
 });
 
