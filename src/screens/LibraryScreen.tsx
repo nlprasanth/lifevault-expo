@@ -13,6 +13,7 @@ import * as FileSystem from 'expo-file-system';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MaterialCommunityIconName } from '../types/icons';
 
 type RootStackParamList = {
   Library: undefined;
@@ -102,7 +103,7 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.itemContent}>
         <View style={styles.iconContainer}>
           <MaterialCommunityIcons 
-            name="file-document-outline" 
+            name={"file-document-outline" as MaterialCommunityIconName}
             size={24} 
             color={theme.colors.primary} 
           />
@@ -114,7 +115,7 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
           </Text>
         </View>
         <MaterialCommunityIcons 
-          name="chevron-right" 
+          name={"chevron-right" as MaterialCommunityIconName}
           size={24} 
           color={theme.colors.primary} 
         />

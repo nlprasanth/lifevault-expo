@@ -21,6 +21,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIconName } from '../types/icons';
 
 interface Settings {
   darkMode: boolean;
@@ -137,7 +138,7 @@ const SettingsScreen = () => {
     onPress, 
     right 
   }: { 
-    icon: string; 
+    icon: MaterialCommunityIconName; 
     title: string; 
     description?: string; 
     onPress?: () => void; 
