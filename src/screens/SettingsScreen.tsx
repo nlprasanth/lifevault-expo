@@ -108,6 +108,9 @@ const SettingsScreen = () => {
           style: 'destructive',
           onPress: async () => {
             try {
+              if (!FileSystem.documentDirectory) {
+                throw new Error('Document directory not available');
+              }
               const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
               await Promise.all(
                 files.map(file =>

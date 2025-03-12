@@ -41,6 +41,9 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
 
   const loadDocuments = async () => {
     try {
+      if (!FileSystem.documentDirectory) {
+        throw new Error('Document directory not available');
+      }
       const directory = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
       const docs = await Promise.all(
         directory.map(async (fileName) => {
@@ -72,6 +75,9 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
 
       if (result.assets && result.assets.length > 0) {
         const { name, uri } = result.assets[0];
+        if (!FileSystem.documentDirectory) {
+          throw new Error('Document directory not available');
+        }
         const newUri = `${FileSystem.documentDirectory}${name}`;
         await FileSystem.copyAsync({ from: uri, to: newUri });
         loadDocuments();
