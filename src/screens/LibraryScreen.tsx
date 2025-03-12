@@ -10,10 +10,29 @@ import { List, FAB, Searchbar, useTheme } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { StatusBar } from 'expo-status-bar';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const LibraryScreen = ({ navigation }) => {
+type RootStackParamList = {
+  Library: undefined;
+  DocumentDetail: { document: Document };
+  Record: undefined;
+  Settings: undefined;
+};
+
+type Document = {
+  id: string;
+  name: string;
+  size: number;
+  createdAt: string;
+  updatedAt: string;
+  type: string;
+};
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Library'>;
+
+const LibraryScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -67,15 +86,15 @@ const LibraryScreen = ({ navigation }) => {
     doc.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: Document }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate('DocumentDetail', { document: item })}
     >
       <List.Item
         title={item.name}
         description={`${item.type.toUpperCase()} • ${new Date(item.updatedAt).toLocaleDateString()}`}
-        left={props => <List.Icon {...props} icon="file-document-outline" size={24} />}
-        right={props => <List.Icon {...props} icon="chevron-right" size={24} />}
+        left={props => <List.Icon {...props} icon="file-document-outline" />}
+        right={props => <List.Icon {...props} icon="chevron-right" />}
       />
     </TouchableOpacity>
   );
@@ -99,7 +118,6 @@ const LibraryScreen = ({ navigation }) => {
         style={[styles.fab, { backgroundColor: theme.colors.primary }]}
         icon="plus"
         onPress={handleAddDocument}
-        size="medium"
       />
     </View>
   );
