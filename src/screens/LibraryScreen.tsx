@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { List, FAB, Searchbar, useTheme } from 'react-native-paper';
+import { FAB, Searchbar, useTheme } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { StatusBar } from 'expo-status-bar';
@@ -96,29 +97,28 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
   const renderItem = ({ item }: { item: Document }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate('DocumentDetail', { document: item })}
+      style={styles.listItem}
     >
-      <List.Item
-        title={item.name}
-        description={`${item.type.toUpperCase()} • ${new Date(item.updatedAt).toLocaleDateString()}`}
-        left={props => (
-          <View style={styles.iconContainer}>
-            <MaterialCommunityIcons 
-              name="file-document-outline" 
-              size={24} 
-              color={theme.colors.primary} 
-            />
-          </View>
-        )}
-        right={props => (
-          <View style={styles.iconContainer}>
-            <MaterialCommunityIcons 
-              name="chevron-right" 
-              size={24} 
-              color={theme.colors.primary} 
-            />
-          </View>
-        )}
-      />
+      <View style={styles.itemContent}>
+        <View style={styles.iconContainer}>
+          <MaterialCommunityIcons 
+            name="file-document-outline" 
+            size={24} 
+            color={theme.colors.primary} 
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.subtitle}>
+            {item.type.toUpperCase()} • {new Date(item.updatedAt).toLocaleDateString()}
+          </Text>
+        </View>
+        <MaterialCommunityIcons 
+          name="chevron-right" 
+          size={24} 
+          color={theme.colors.primary} 
+        />
+      </View>
     </TouchableOpacity>
   );
 
@@ -136,6 +136,7 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
+        contentContainerStyle={styles.listContent}
       />
       <FAB
         style={[styles.fab, { backgroundColor: theme.colors.primary }]}
@@ -154,6 +155,34 @@ const styles = StyleSheet.create({
   searchBar: {
     margin: 16,
   },
+  listContent: {
+    paddingBottom: 80,
+  },
+  listItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+  },
+  itemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    marginRight: 16,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#000',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
+  },
   separator: {
     height: 1,
     backgroundColor: '#e0e0e0',
@@ -163,11 +192,6 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-  },
-  iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 8,
   },
 });
 

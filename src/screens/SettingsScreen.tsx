@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import {
-  List,
   Switch,
   Divider,
   Button,
@@ -26,14 +27,6 @@ interface Settings {
   biometricLock: boolean;
   autoBackup: boolean;
 }
-
-type IconName = 
-  | 'theme-light-dark'
-  | 'fingerprint'
-  | 'lock'
-  | 'cloud-upload'
-  | 'backup-restore'
-  | 'delete';
 
 const SettingsScreen = () => {
   const theme = useTheme();
@@ -137,20 +130,51 @@ const SettingsScreen = () => {
     );
   };
 
-  const renderIcon = (name: IconName, color?: string) => (
-    <View style={styles.iconContainer}>
-      <MaterialCommunityIcons name={name} size={24} color={color || theme.colors.primary} />
-    </View>
+  const SettingsItem = ({ 
+    icon, 
+    title, 
+    description, 
+    onPress, 
+    right 
+  }: { 
+    icon: string; 
+    title: string; 
+    description?: string; 
+    onPress?: () => void; 
+    right?: () => React.ReactNode; 
+  }) => (
+    <TouchableOpacity 
+      style={styles.settingsItem} 
+      onPress={onPress}
+      disabled={!onPress}
+    >
+      <View style={styles.settingsItemContent}>
+        <View style={styles.iconContainer}>
+          <MaterialCommunityIcons 
+            name={icon} 
+            size={24} 
+            color={theme.colors.primary} 
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.settingsTitle}>{title}</Text>
+          {description && (
+            <Text style={styles.settingsDescription}>{description}</Text>
+          )}
+        </View>
+        {right && right()}
+      </View>
+    </TouchableOpacity>
   );
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="light" />
-      <List.Section>
-        <List.Subheader>Appearance</List.Subheader>
-        <List.Item
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Appearance</Text>
+        <SettingsItem
+          icon="theme-light-dark"
           title="Dark Mode"
-          left={() => renderIcon('theme-light-dark')}
           right={() => (
             <Switch
               value={darkMode}
@@ -161,17 +185,17 @@ const SettingsScreen = () => {
             />
           )}
         />
-      </List.Section>
+      </View>
 
       <Divider />
 
-      <List.Section>
-        <List.Subheader>Security</List.Subheader>
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Security</Text>
         {biometricSupported && (
-          <List.Item
+          <SettingsItem
+            icon="fingerprint"
             title="Biometric Lock"
             description="Require authentication to open app"
-            left={() => renderIcon('fingerprint')}
             right={() => (
               <Switch
                 value={biometricLock}
@@ -180,21 +204,21 @@ const SettingsScreen = () => {
             )}
           />
         )}
-        <List.Item
+        <SettingsItem
+          icon="lock"
           title="Change Password"
-          left={() => renderIcon('lock')}
           onPress={() => setShowPasswordDialog(true)}
         />
-      </List.Section>
+      </View>
 
       <Divider />
 
-      <List.Section>
-        <List.Subheader>Backup</List.Subheader>
-        <List.Item
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Backup</Text>
+        <SettingsItem
+          icon="cloud-upload"
           title="Auto Backup"
           description="Automatically backup to cloud"
-          left={() => renderIcon('cloud-upload')}
           right={() => (
             <Switch
               value={autoBackup}
@@ -205,24 +229,24 @@ const SettingsScreen = () => {
             />
           )}
         />
-        <List.Item
+        <SettingsItem
+          icon="backup-restore"
           title="Backup Now"
-          left={() => renderIcon('backup-restore')}
           onPress={() => Alert.alert('Info', 'Backup started')}
         />
-      </List.Section>
+      </View>
 
       <Divider />
 
-      <List.Section>
-        <List.Subheader>Data</List.Subheader>
-        <List.Item
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Data</Text>
+        <SettingsItem
+          icon="delete"
           title="Clear All Data"
           description="Delete all documents and recordings"
-          left={() => renderIcon('delete', '#dc3545')}
           onPress={handleClearData}
         />
-      </List.Section>
+      </View>
 
       <Portal>
         <Dialog
@@ -260,10 +284,39 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  iconContainer: {
-    justifyContent: 'center',
+  section: {
+    paddingTop: 16,
+  },
+  sectionHeader: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#666',
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+  },
+  settingsItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+  },
+  settingsItemContent: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 8,
+  },
+  iconContainer: {
+    marginRight: 16,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  settingsTitle: {
+    fontSize: 16,
+    color: '#000',
+  },
+  settingsDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
   },
 });
 
