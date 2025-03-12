@@ -46,7 +46,6 @@ export default function App() {
       <PaperProvider theme={theme}>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="Library"
             screenOptions={{
               headerStyle: {
                 backgroundColor: '#f4511e',
@@ -56,27 +55,46 @@ export default function App() {
                 fontWeight: 'bold',
               },
               animation: 'slide_from_right',
+              contentStyle: {
+                backgroundColor: '#fff',
+              },
             }}
           >
             <Stack.Screen 
               name="Library" 
               component={LibraryScreen}
-              options={{ title: 'My Documents' }}
+              options={{
+                title: 'My Documents',
+                headerLargeTitle: false,
+                headerLargeTitleStyle: undefined,
+              }}
             />
             <Stack.Screen 
               name="DocumentDetail" 
               component={DocumentDetailScreen}
-              options={{ title: 'Document Details' }}
+              options={{
+                title: 'Document Details',
+                headerLargeTitle: false,
+                headerLargeTitleStyle: undefined,
+              }}
             />
             <Stack.Screen 
               name="Record" 
               component={RecordScreen}
-              options={{ title: 'Record' }}
+              options={{
+                title: 'Record',
+                headerLargeTitle: false,
+                headerLargeTitleStyle: undefined,
+              }}
             />
             <Stack.Screen 
               name="Settings" 
               component={SettingsScreen}
-              options={{ title: 'Settings' }}
+              options={{
+                title: 'Settings',
+                headerLargeTitle: false,
+                headerLargeTitleStyle: undefined,
+              }}
             />
           </Stack.Navigator>
           <StatusBar style="light" />
