@@ -19,6 +19,7 @@ import * as FileSystem from 'expo-file-system';
 import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface Settings {
   darkMode: boolean;
@@ -129,7 +130,9 @@ const SettingsScreen = () => {
   };
 
   const renderIcon = (name: string, color?: string) => (
-    <List.Icon {...{ icon: name, color }} />
+    <View style={styles.iconContainer}>
+      <MaterialCommunityIcons name={name} size={24} color={color || theme.colors.primary} />
+    </View>
   );
 
   return (
@@ -248,6 +251,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 8,
   },
 });
 

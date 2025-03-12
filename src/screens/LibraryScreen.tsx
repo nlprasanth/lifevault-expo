@@ -10,6 +10,7 @@ import { List, FAB, Searchbar, useTheme } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { StatusBar } from 'expo-status-bar';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
@@ -92,10 +93,6 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
     doc.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderIcon = (name: string) => (
-    <List.Icon {...{ icon: name, size: 24 }} />
-  );
-
   const renderItem = ({ item }: { item: Document }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate('DocumentDetail', { document: item })}
@@ -103,8 +100,16 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
       <List.Item
         title={item.name}
         description={`${item.type.toUpperCase()} • ${new Date(item.updatedAt).toLocaleDateString()}`}
-        left={() => renderIcon('file-document-outline')}
-        right={() => renderIcon('chevron-right')}
+        left={props => (
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons name="file-document-outline" size={24} color={theme.colors.primary} />
+          </View>
+        )}
+        right={props => (
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons name="chevron-right" size={24} color={theme.colors.primary} />
+          </View>
+        )}
       />
     </TouchableOpacity>
   );
@@ -150,6 +155,11 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 8,
   },
 });
 
