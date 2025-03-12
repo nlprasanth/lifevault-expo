@@ -27,6 +27,14 @@ interface Settings {
   autoBackup: boolean;
 }
 
+type IconName = 
+  | 'theme-light-dark'
+  | 'fingerprint'
+  | 'lock'
+  | 'cloud-upload'
+  | 'backup-restore'
+  | 'delete';
+
 const SettingsScreen = () => {
   const theme = useTheme();
   const [darkMode, setDarkMode] = useState(false);
@@ -129,7 +137,7 @@ const SettingsScreen = () => {
     );
   };
 
-  const renderIcon = (name: string, color?: string) => (
+  const renderIcon = (name: IconName, color?: string) => (
     <View style={styles.iconContainer}>
       <MaterialCommunityIcons name={name} size={24} color={color || theme.colors.primary} />
     </View>

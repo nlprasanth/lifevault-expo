@@ -7,10 +7,11 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { IconButton, Button } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { StatusBar } from 'expo-status-bar';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface DocumentDetailScreenProps {
   route: {
@@ -31,6 +32,7 @@ interface DocumentDetailScreenProps {
 const DocumentDetailScreen: React.FC<DocumentDetailScreenProps> = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const theme = useTheme();
   const { document } = route.params as DocumentDetailScreenProps['route']['params'];
   const [isEditing, setIsEditing] = useState(false);
 
@@ -38,20 +40,26 @@ const DocumentDetailScreen: React.FC<DocumentDetailScreenProps> = () => {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.headerButtons}>
-          <IconButton
-            icon="pencil"
-            size={20}
+          <MaterialCommunityIcons
+            name="pencil"
+            size={24}
+            color="#fff"
             onPress={() => setIsEditing(!isEditing)}
+            style={styles.headerIcon}
           />
-          <IconButton
-            icon="share-variant"
-            size={20}
+          <MaterialCommunityIcons
+            name="share-variant"
+            size={24}
+            color="#fff"
             onPress={handleShare}
+            style={styles.headerIcon}
           />
-          <IconButton
-            icon="delete"
-            size={20}
+          <MaterialCommunityIcons
+            name="delete"
+            size={24}
+            color="#fff"
             onPress={handleDelete}
+            style={styles.headerIcon}
           />
         </View>
       ),
@@ -60,6 +68,9 @@ const DocumentDetailScreen: React.FC<DocumentDetailScreenProps> = () => {
 
   const handleShare = async () => {
     try {
+      if (!FileSystem.documentDirectory) {
+        throw new Error('Document directory not available');
+      }
       const fileUri = `${FileSystem.documentDirectory}${document.name}`;
       const { exists } = await FileSystem.getInfoAsync(fileUri);
       
@@ -75,8 +86,8 @@ const DocumentDetailScreen: React.FC<DocumentDetailScreenProps> = () => {
 
       await Sharing.shareAsync(fileUri);
     } catch (error) {
-      Alert.alert('Error', 'Failed to share document');
       console.error('Share error:', error);
+      Alert.alert('Error', 'Failed to share document');
     }
   };
 
@@ -94,12 +105,15 @@ const DocumentDetailScreen: React.FC<DocumentDetailScreenProps> = () => {
           style: 'destructive',
           onPress: async () => {
             try {
+              if (!FileSystem.documentDirectory) {
+                throw new Error('Document directory not available');
+              }
               const fileUri = `${FileSystem.documentDirectory}${document.name}`;
               await FileSystem.deleteAsync(fileUri);
               navigation.goBack();
             } catch (error) {
-              Alert.alert('Error', 'Failed to delete document');
               console.error('Delete error:', error);
+              Alert.alert('Error', 'Failed to delete document');
             }
           },
         },
@@ -185,6 +199,9 @@ const styles = StyleSheet.create({
   headerButtons: {
     flexDirection: 'row',
   },
+  headerIcon: {
+    marginHorizontal: 8,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -205,11 +222,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   label: {
-    fontSize: 16,
+    fontWeight: 'bold',
     color: '#666',
   },
   value: {
-    fontSize: 16,
     color: '#333',
   },
   content: {
@@ -218,6 +234,7 @@ const styles = StyleSheet.create({
   contentText: {
     fontSize: 16,
     lineHeight: 24,
+    color: '#333',
   },
   actionButtons: {
     padding: 16,
@@ -225,7 +242,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   button: {
-    minWidth: 120,
+    flex: 1,
+    marginHorizontal: 8,
   },
   deleteButton: {
     borderColor: 'red',

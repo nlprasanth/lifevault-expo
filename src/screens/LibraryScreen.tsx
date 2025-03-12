@@ -102,12 +102,20 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
         description={`${item.type.toUpperCase()} • ${new Date(item.updatedAt).toLocaleDateString()}`}
         left={props => (
           <View style={styles.iconContainer}>
-            <MaterialCommunityIcons name="file-document-outline" size={24} color={theme.colors.primary} />
+            <MaterialCommunityIcons 
+              name="file-document-outline" 
+              size={24} 
+              color={theme.colors.primary} 
+            />
           </View>
         )}
         right={props => (
           <View style={styles.iconContainer}>
-            <MaterialCommunityIcons name="chevron-right" size={24} color={theme.colors.primary} />
+            <MaterialCommunityIcons 
+              name="chevron-right" 
+              size={24} 
+              color={theme.colors.primary} 
+            />
           </View>
         )}
       />
