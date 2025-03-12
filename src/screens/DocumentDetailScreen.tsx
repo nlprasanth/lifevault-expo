@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, useTheme } from 'react-native-paper';
@@ -40,27 +41,36 @@ const DocumentDetailScreen: React.FC<DocumentDetailScreenProps> = () => {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.headerButtons}>
-          <MaterialCommunityIcons
-            name="pencil"
-            size={24}
-            color="#fff"
+          <TouchableOpacity 
             onPress={() => setIsEditing(!isEditing)}
-            style={styles.headerIcon}
-          />
-          <MaterialCommunityIcons
-            name="share-variant"
-            size={24}
-            color="#fff"
+            style={styles.headerButton}
+          >
+            <MaterialCommunityIcons
+              name="pencil"
+              size={24}
+              color="#fff"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity 
             onPress={handleShare}
-            style={styles.headerIcon}
-          />
-          <MaterialCommunityIcons
-            name="delete"
-            size={24}
-            color="#fff"
+            style={styles.headerButton}
+          >
+            <MaterialCommunityIcons
+              name="share-variant"
+              size={24}
+              color="#fff"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity 
             onPress={handleDelete}
-            style={styles.headerIcon}
-          />
+            style={styles.headerButton}
+          >
+            <MaterialCommunityIcons
+              name="delete"
+              size={24}
+              color="#fff"
+            />
+          </TouchableOpacity>
         </View>
       ),
     });
@@ -198,9 +208,11 @@ const styles = StyleSheet.create({
   },
   headerButtons: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
-  headerIcon: {
-    marginHorizontal: 8,
+  headerButton: {
+    padding: 8,
+    marginHorizontal: 4,
   },
   title: {
     fontSize: 24,
@@ -210,7 +222,6 @@ const styles = StyleSheet.create({
   type: {
     fontSize: 14,
     color: '#666',
-    textTransform: 'uppercase',
   },
   infoContainer: {
     padding: 16,
@@ -218,15 +229,16 @@ const styles = StyleSheet.create({
   },
   infoRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     marginBottom: 8,
   },
   label: {
+    flex: 1,
     fontWeight: 'bold',
-    color: '#666',
+    color: '#333',
   },
   value: {
-    color: '#333',
+    flex: 2,
+    color: '#666',
   },
   content: {
     padding: 16,
@@ -242,8 +254,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   button: {
-    flex: 1,
-    marginHorizontal: 8,
+    minWidth: 120,
   },
   deleteButton: {
     borderColor: 'red',
