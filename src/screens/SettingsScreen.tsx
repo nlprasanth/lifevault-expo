@@ -20,6 +20,12 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 
+interface Settings {
+  darkMode: boolean;
+  biometricLock: boolean;
+  autoBackup: boolean;
+}
+
 const SettingsScreen = () => {
   const theme = useTheme();
   const [darkMode, setDarkMode] = useState(false);
@@ -41,12 +47,12 @@ const SettingsScreen = () => {
 
   const loadSettings = async () => {
     try {
-      const settings = await AsyncStorage.getItem('settings');
-      if (settings) {
-        const { darkMode: dm, biometricLock: bl, autoBackup: ab } = JSON.parse(settings);
-        setDarkMode(dm);
-        setBiometricLock(bl);
-        setAutoBackup(ab);
+      const settingsStr = await AsyncStorage.getItem('settings');
+      if (settingsStr) {
+        const settings = JSON.parse(settingsStr) as Settings;
+        setDarkMode(settings.darkMode);
+        setBiometricLock(settings.biometricLock);
+        setAutoBackup(settings.autoBackup);
       }
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -55,11 +61,12 @@ const SettingsScreen = () => {
 
   const saveSettings = async () => {
     try {
-      await AsyncStorage.setItem('settings', JSON.stringify({
+      const settings: Settings = {
         darkMode,
         biometricLock,
         autoBackup,
-      }));
+      };
+      await AsyncStorage.setItem('settings', JSON.stringify(settings));
     } catch (error) {
       console.error('Error saving settings:', error);
       Alert.alert('Error', 'Failed to save settings');
@@ -118,6 +125,10 @@ const SettingsScreen = () => {
     );
   };
 
+  const renderIcon = (name: string, color?: string) => (
+    <List.Icon {...{ icon: name, color }} />
+  );
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="light" />
@@ -125,7 +136,7 @@ const SettingsScreen = () => {
         <List.Subheader>Appearance</List.Subheader>
         <List.Item
           title="Dark Mode"
-          left={() => <List.Icon icon="theme-light-dark" size={24} />}
+          left={() => renderIcon('theme-light-dark')}
           right={() => (
             <Switch
               value={darkMode}
@@ -146,7 +157,7 @@ const SettingsScreen = () => {
           <List.Item
             title="Biometric Lock"
             description="Require authentication to open app"
-            left={() => <List.Icon icon="fingerprint" size={24} />}
+            left={() => renderIcon('fingerprint')}
             right={() => (
               <Switch
                 value={biometricLock}
@@ -157,7 +168,7 @@ const SettingsScreen = () => {
         )}
         <List.Item
           title="Change Password"
-          left={() => <List.Icon icon="lock" size={24} />}
+          left={() => renderIcon('lock')}
           onPress={() => setShowPasswordDialog(true)}
         />
       </List.Section>
@@ -169,7 +180,7 @@ const SettingsScreen = () => {
         <List.Item
           title="Auto Backup"
           description="Automatically backup to cloud"
-          left={() => <List.Icon icon="cloud-upload" size={24} />}
+          left={() => renderIcon('cloud-upload')}
           right={() => (
             <Switch
               value={autoBackup}
@@ -182,7 +193,7 @@ const SettingsScreen = () => {
         />
         <List.Item
           title="Backup Now"
-          left={() => <List.Icon icon="backup-restore" size={24} />}
+          left={() => renderIcon('backup-restore')}
           onPress={() => Alert.alert('Info', 'Backup started')}
         />
       </List.Section>
@@ -194,7 +205,7 @@ const SettingsScreen = () => {
         <List.Item
           title="Clear All Data"
           description="Delete all documents and recordings"
-          left={() => <List.Icon icon="delete" size={24} color="#dc3545" />}
+          left={() => renderIcon('delete', '#dc3545')}
           onPress={handleClearData}
         />
       </List.Section>

@@ -86,6 +86,10 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
     doc.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const renderIcon = (name: string) => (
+    <List.Icon {...{ icon: name, size: 24 }} />
+  );
+
   const renderItem = ({ item }: { item: Document }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate('DocumentDetail', { document: item })}
@@ -93,8 +97,8 @@ const LibraryScreen: React.FC<Props> = ({ navigation }) => {
       <List.Item
         title={item.name}
         description={`${item.type.toUpperCase()} • ${new Date(item.updatedAt).toLocaleDateString()}`}
-        left={() => <List.Icon icon="file-document-outline" size={24} />}
-        right={() => <List.Icon icon="chevron-right" size={24} />}
+        left={() => renderIcon('file-document-outline')}
+        right={() => renderIcon('chevron-right')}
       />
     </TouchableOpacity>
   );
