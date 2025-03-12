@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { List, FAB, Searchbar } from 'react-native-paper';
+import { List, FAB, Searchbar, useTheme } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { StatusBar } from 'expo-status-bar';
 
 const LibraryScreen = ({ navigation }) => {
+  const theme = useTheme();
   const [documents, setDocuments] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -30,7 +31,7 @@ const LibraryScreen = ({ navigation }) => {
             id: fileName,
             name: fileName,
             size: fileInfo.size || 0,
-            createdAt: new Date().toISOString(), // You'll need to store this metadata separately
+            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             type: fileName.split('.').pop() || 'unknown',
           };
@@ -73,8 +74,8 @@ const LibraryScreen = ({ navigation }) => {
       <List.Item
         title={item.name}
         description={`${item.type.toUpperCase()} • ${new Date(item.updatedAt).toLocaleDateString()}`}
-        left={props => <List.Icon {...props} icon="file-document-outline" />}
-        right={props => <List.Icon {...props} icon="chevron-right" />}
+        left={props => <List.Icon {...props} icon="file-document-outline" size={24} />}
+        right={props => <List.Icon {...props} icon="chevron-right" size={24} />}
       />
     </TouchableOpacity>
   );
@@ -95,9 +96,10 @@ const LibraryScreen = ({ navigation }) => {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
       <FAB
-        style={styles.fab}
+        style={[styles.fab, { backgroundColor: theme.colors.primary }]}
         icon="plus"
         onPress={handleAddDocument}
+        size="medium"
       />
     </View>
   );
@@ -120,7 +122,6 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: '#f4511e',
   },
 });
 
